@@ -15,11 +15,15 @@
     <script type="text/babel">
         class Hello extends React.Component {
             render() {
-                return <h1>Привет, Eugene</h1>;
+                return <div>
+                    <p>Name: {this.props.name}</p>
+                    <p>Age: {this.props.age}</p>
+                </div>;
             }
         }
+        Hello.defaultProps = { name: "John", age: 55 }
         ReactDOM.render(
-            <Hello />,
+            <Hello name="Dima" />,
             document.getElementById("app")
         )
     </script>
