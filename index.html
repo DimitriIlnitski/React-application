@@ -13,19 +13,25 @@
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        class Hello extends React.Component {
+        class ClickButton extends React.Component {
+            constructor(props) {
+                super(props);
+                this.press = this.press.bind(this);
+            }
+            press() {
+                console.log(this);
+                alert("Hello!!!!!");
+            }
             render() {
-                return <div>
-                    <p>Name: {this.props.name}</p>
-                    <p>Age: {this.props.age}</p>
-                </div>;
+                return <button onClick={this.press}>Click</button>;
             }
         }
-        Hello.defaultProps = { name: "John", age: 55 }
         ReactDOM.render(
-            <Hello name="Dima" />,
-            document.getElementById("app")
+            <ClickButton />,
+            document.getElementById('app')
         )
+
+
     </script>
 </body>
 
