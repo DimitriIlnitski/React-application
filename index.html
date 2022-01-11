@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>React</title>
+    <title>METANIT.COM</title>
 </head>
 
 <body>
@@ -14,24 +14,34 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
         class ClickButton extends React.Component {
+
             constructor(props) {
                 super(props);
+                this.state = { counter: 0 };
+
                 this.press = this.press.bind(this);
             }
+            incrementCounter(prevState, props) {
+                return {
+                    counter: prevState.counter + parseInt(props.increment)
+                };
+            }
             press() {
-                console.log(this);
-                alert("Hello!!!!!");
+                this.setState(this.incrementCounter);
+                this.setState(this.incrementCounter);
             }
             render() {
-                return <button onClick={this.press}>Click</button>;
+                return <div>
+                    <button onClick={this.press}>Count</button>
+                    <div>Counter: {this.state.counter}<br /> Increment: {this.props.increment}</div>
+                </div>
             }
         }
+
         ReactDOM.render(
-            <ClickButton />,
-            document.getElementById('app')
+            <ClickButton increment="1" />,
+            document.getElementById("app")
         )
-
-
     </script>
 </body>
 
