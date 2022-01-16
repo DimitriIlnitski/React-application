@@ -12,46 +12,58 @@
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        class Clock extends React.Component {
+        const propsValues = {
+            title: "Список смартфонов",
+            items: [
+                "Samsung Galaxy Note20",
+                "Apple iPhone 12 Pro",
+                "Google Pixel 5",
+                "Huawei P40 Pro",
+                "OnePlus 8 Pro",
+                "Asus Zenfone 7 Pro"
+            ]
+        };
+
+        class Item extends React.Component {
+            render() {
+                return <li>{this.props.name}</li>;
+            }
+        }
+
+        class ItemsList extends React.Component {
             constructor(props) {
                 super(props);
-                this.state = { date: new Date(), name: "Tom" };
-                this.unmount = this.unmount.bind(this);
-            }
-            unmount() {
-                ReactDOM.unmountComponentAtNode(document.getElementById("app"));
-            }
-            componentDidMount() {
-                this.timerId = setInterval(
-                    () => this.tick(),
-                    1000
-                );
-                console.log("componentDidMount()");
-            }
+                this.state = { items: this.props.data.items };
 
-            componentWillUnmount() {
-                clearInterval(this.timerId);
-                console.log("componentWillUnmount()");
+                this.filterList = this.filterList.bind(this);
             }
-
-            tick() {
-                this.setState({
-                    date: new Date()
+            // фильтрация списка
+            filterList(e) {
+                var filteredList = this.props.data.items.filter(function (item) {
+                    return item.toLowerCase().search(e.target.value.toLowerCase()) !== -1;
                 });
+                // обновление состояния
+                this.setState({ items: filteredList });
             }
 
             render() {
                 return (
                     <div>
-                        <h1>Привет, {this.state.name}</h1>
-                        <h2>Текущее время {this.state.date.toLocaleTimeString()}.</h2>
-                        <button onClick={this.unmount}>Unmount</button>
-                    </div>
-                );
+                        <h2>{this.props.data.title}</h2>
+                        <input placeholder="Поиск" onChange={this.filterList} />
+                        <ul>
+                            {
+                                this.state.items.map(function (item) {
+                                    return <Item key={item} name={item} />
+                                })
+                            }
+                        </ul>
+                    </div>);
             }
         }
+
         ReactDOM.render(
-            <Clock />,
+            <ItemsList data={propsValues} />,
             document.getElementById("app")
         )
     </script>
