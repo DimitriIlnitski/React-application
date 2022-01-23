@@ -3,7 +3,17 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Маршруты в React</title>
+  <title>Links in React</title>
+  <style>
+    a {
+      margin: 5px;
+    }
+
+    .active {
+      color: green;
+      font-weight: bold;
+    }
+  </style>
 </head>
 
 <body>
@@ -12,45 +22,58 @@
   <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
   <script src="https://unpkg.com/history@5/umd/history.development.js" crossorigin></script>
+
   <script src="https://unpkg.com/react-router@6/umd/react-router.development.js" crossorigin></script>
   <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.development.js" crossorigin></script>
+
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
     const Router = ReactRouterDOM.BrowserRouter;
     const Route = ReactRouterDOM.Route;
     const Routes = ReactRouterDOM.Routes;
-    const Outlet = ReactRouterDOM.Outlet;
+    const NavLink = ReactRouterDOM.NavLink;
 
-    class Phone extends React.Component {
+    class Home extends React.Component {
       render() {
-        return <h3>Смартфоны</h3>;
+        return <h2>Главная</h2>;
       }
     }
-    class Tablet extends React.Component {
+    class About extends React.Component {
       render() {
-        return <h3>Планшеты</h3>;
+        return <h2>О сайте</h2>;
+      }
+    }
+    class NotFound extends React.Component {
+      render() {
+        return <h2>Ресурс не найден</h2>;
       }
     }
     class Products extends React.Component {
       render() {
         return <div>
           <h2>Товары</h2>
-          <Outlet />
         </div>;
+      }
+    }
+    class Nav extends React.Component {
+      render() {
+        return <nav>
+          <NavLink to="/" className={({ isActive }) => (isActive ? " active" : "")}>Главная</NavLink>
+          <NavLink to="/about" className={({ isActive }) => (isActive ? " active" : "")}>О сайте</NavLink>
+          <NavLink to="/products" className={({ isActive }) => (isActive ? " active" : "")}>Товары</NavLink>
+        </nav>;
       }
     }
     ReactDOM.render(
       <Router>
         <div>
+          <Nav />
           <Routes>
-            <Route path="/" element={<h2>Главная</h2>} />
-            <Route path="/products" element={<Products />}>
-              <Route index element={<h3>Каталог товаров</h3>} />
-              <Route path="phones" element={<Phone />} />
-              <Route path="tablets" element={<Tablet />} />
-            </Route>
-            <Route path="*" element={<h2>Ресурс не найден</h2>} />
+            <Route path="/" element={<Home />} />
+            <Route path="/about" element={<About />} />
+            <Route path="/products" element={<Products />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
         </div>
       </Router>,
