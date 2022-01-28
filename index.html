@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Navigation in React with params</title>
+  <title>Conditional routing in React</title>
 </head>
 
 <body>
@@ -24,32 +24,31 @@
     const Navigate = ReactRouterDOM.Navigate;
     const useParams = ReactRouterDOM.useParams;
 
+    let logged = false;
+
     class Home extends React.Component {
       render() {
-        return <h2>Главная</h2>;
+        if (logged)
+          return <h2>Welcome</h2>;
+        return <Navigate to="/login" />;
       }
     }
-    function New() {
-      const params = useParams();
-      return <h2>New {params.id}</h2>;
+    class Login extends React.Component {
+      render() {
+        logged = true;
+        return <h2>Login</h2>;
+      }
     }
-    function Old() {
-      const params = useParams();
-      return <Navigate to={`/new/${params.id}`} />;
-    }
-
     ReactDOM.render(
       <Router>
         <div>
           <nav>
             <Link to="/">Home</Link> |
-            <Link to="/old/123">Old</Link> |
-            <Link to="/new/456">New</Link>
+            <Link to="/login">Login</Link>
           </nav>
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/new/:id" element={<New />} />
-            <Route path="/old/:id" element={<Old />} />
+            <Route path="/login" element={<Login />} />
           </Routes>
         </div>
       </Router>,
