@@ -3,68 +3,182 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Program routing React</title>
+  <title>Form creation</title>
 </head>
 
 <body>
   <div id="app"></div>
 
-  <script crossorigin src="https://unpkg.com/react@17/umd/react.development.js"></script>
-  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-  <script src="https://unpkg.com/history@5/umd/history.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-router@6/umd/react-router.development.js" crossorigin></script>
-  <script src="https://unpkg.com/react-router-dom@6/umd/react-router-dom.development.js" crossorigin></script>
+  <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
+  <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
   <script type="text/babel">
-    const Router = ReactRouterDOM.BrowserRouter;
-    const Route = ReactRouterDOM.Route;
-    const Routes = ReactRouterDOM.Routes;
-    const Link = ReactRouterDOM.Link;
-    const Navigate = ReactRouterDOM.Navigate;
-    const useParams = ReactRouterDOM.useParams;
-    const useNavigate = ReactRouterDOM.useNavigate;
+    class UserForm extends React.Component {
+      constructor(props) {
+        super(props)
+        this.state = {
+          currentStep: 1,
+          username: '',
+          email: '',
+          password: '',
+        }
+      }
 
-    class Home extends React.Component {
+      handleChange = event => {
+        const { name, value } = event.target
+        this.setState({
+          [name]: value
+        })
+      }
+
+      handleSubmit = event => {
+        event.preventDefault()
+        const { email, username, password } = this.state;
+        alert(`Введенные данные: \nИмя: ${username} \nEmail: ${email} \nПароль: ${password}`)
+      }
+
+      _next = () => {
+        let currentStep = this.state.currentStep
+        currentStep = currentStep >= 2 ? 3 : currentStep + 1
+        this.setState({
+          currentStep: currentStep
+        })
+      }
+
+      _prev = () => {
+        let currentStep = this.state.currentStep
+        currentStep = currentStep <= 1 ? 1 : currentStep - 1
+        this.setState({
+          currentStep: currentStep
+        })
+      }
+
+      previousButton() {
+        let currentStep = this.state.currentStep;
+        if (currentStep !== 1) {
+          return (
+            <button type="button" onClick={this._prev}>Назад</button>
+          )
+        }
+        return null;
+      }
+
+      nextButton() {
+        let currentStep = this.state.currentStep;
+        if (currentStep < 3) {
+          return (
+            <button type="button" onClick={this._next}>Вперед</button>
+          )
+        }
+        return null;
+      }
+
+      sendButton() {
+        let currentStep = this.state.currentStep;
+        if (currentStep === 3) {
+          return (
+            <button>Отправить</button>
+          )
+        }
+        return null;
+      }
+
       render() {
-        return <h2>Главная</h2>;
+        return (
+          <div>
+            <h1>Форма входа</h1>
+            <p>Шаг {this.state.currentStep} </p>
+
+            <form onSubmit={this.handleSubmit}>
+              <UserNameStep
+                currentStep={this.state.currentStep}
+                handleChange={this.handleChange}
+                username={this.state.username}
+              />
+              <EmailStep
+                currentStep={this.state.currentStep}
+                handleChange={this.handleChange}
+                email={this.state.email}
+              />
+              <PasswordStep
+                currentStep={this.state.currentStep}
+                handleChange={this.handleChange}
+                password={this.state.password}
+              />
+              <p>
+                {this.previousButton()}
+                {this.nextButton()}
+                {this.sendButton()}
+              </p>
+            </form>
+          </div>
+        );
       }
     }
-    function New() {
-      const params = useParams();
-      return <h2>New {params.id}</h2>;
+
+    class UserNameStep extends React.Component {
+
+      render() {
+        if (this.props.currentStep !== 1) {
+          return null
+        }
+        return (
+          <div>
+            <label>Имя</label>
+            <input
+              name="username"
+              type="text"
+              placeholder="Введите имя"
+              value={this.props.username}
+              onChange={this.props.handleChange}
+            />
+          </div>
+        );
+      }
     }
-    function Old() {
-      const params = useParams();
-      const id = params.id;
-      const navigate = useNavigate();
-      return <div>
-        <h2>Old {id}</h2>
-        <button
-          onClick={async event => {
-            navigate(`/new/${id}`);
-          }}
-        >Navigate</button>
-      </div>;
+    class EmailStep extends React.Component {
+      render() {
+        if (this.props.currentStep !== 2) {
+          return null;
+        }
+        return (
+          <div>
+            <label>Email</label>
+            <input
+              name="email"
+              type="text"
+              placeholder="Введите email"
+              value={this.props.email}
+              onChange={this.props.handleChange}
+            />
+          </div>
+        );
+      }
     }
 
-    ReactDOM.render(
-      <Router>
-        <div>
-          <nav>
-            <Link to="/">Home</Link> |
-            <Link to="/old/123">Old</Link> |
-            <Link to="/new/456">New</Link>
-          </nav>
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/new/:id" element={<New />} />
-            <Route path="/old/:id" element={<Old />} />
-          </Routes>
-        </div>
-      </Router>,
-      document.getElementById("app")
-    )
+
+    class PasswordStep extends React.Component {
+      render() {
+        if (this.props.currentStep !== 3) {
+          return null
+        }
+        return (
+          <div>
+            <label>Пароль</label>
+            <input
+              name="password"
+              type="password"
+              placeholder="Введите пароль"
+              value={this.props.password}
+              onChange={this.props.handleChange}
+            />
+          </div>
+        );
+      }
+    }
+
+    ReactDOM.render(<UserForm />, document.getElementById('app'))
   </script>
 </body>
 
