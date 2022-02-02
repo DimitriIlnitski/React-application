@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Hooks</title>
+    <title>Hooks2</title>
 </head>
 
 <body>
@@ -13,32 +13,19 @@
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        class ClickButton extends React.Component {
-
-            constructor(props) {
-                super(props);
-                this.state = { counter: 0 };
-
-                this.press = this.press.bind(this);
-            }
-            incrementCounter(prevState, props) {
-                return {
-                    counter: prevState.counter + props.increment
-                };
-            }
-            press() {
-                this.setState(this.incrementCounter);
-            }
-            render() {
-                return <div>
-                    <button onClick={this.press}>Count</button>
-                    <div>Counter: {this.state.counter}<br /> Increment: {this.props.increment}</div>
-                </div>
-            }
+        function ClickButtonHook(props) {
+            const [count, setCount] = React.useState(0);
+            const press = function () {
+                setCount(count + props.increment);
+            };
+            return (<div>
+                <button onClick={press}>Count</button>
+                <div>Counter: {count}<br /> Increment: {props.increment}</div>
+            </div>);
         }
 
         ReactDOM.render(
-            <ClickButton increment={2} />,
+            <ClickButtonHook increment={2} />,
             document.getElementById("app")
         )
     </script>
