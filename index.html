@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Hooks2</title>
+    <title>Hooks3</title>
 </head>
 
 <body>
@@ -13,19 +13,21 @@
     <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
-        function ClickButtonHook(props) {
+
+        function Counter() {
             const [count, setCount] = React.useState(0);
-            const press = function () {
-                setCount(count + props.increment);
-            };
-            return (<div>
-                <button onClick={press}>Count</button>
-                <div>Counter: {count}<br /> Increment: {props.increment}</div>
-            </div>);
+            return (
+                <div>
+                    <h3>Count = {count}</h3>
+                    <button onClick={() => setCount(count + 1)}>
+                        Увеличить
+                    </button>
+                </div>
+            );
         }
 
         ReactDOM.render(
-            <ClickButtonHook increment={2} />,
+            <Counter />,
             document.getElementById("app")
         )
     </script>
