@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
-    <title>Hooks3</title>
+    <title>Hooks4</title>
 </head>
 
 <body>
@@ -14,20 +14,20 @@
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
     <script type="text/babel">
 
-        function Counter() {
-            const [count, setCount] = React.useState(0);
+        function User() {
+            const [name, setName] = React.useState("Tom");
+            const [age, setAge] = React.useState(36);
+
             return (
                 <div>
-                    <h3>Count = {count}</h3>
-                    <button onClick={() => setCount(count + 1)}>
-                        Увеличить
-                    </button>
+                    <h3>Имя: {name}</h3>
+                    <h3>Возраст: {age}</h3>
                 </div>
             );
         }
 
         ReactDOM.render(
-            <Counter />,
+            <User />,
             document.getElementById("app")
         )
     </script>
