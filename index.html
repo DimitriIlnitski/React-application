@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Use_State</title>
+  <title>Use_Effect</title>
 </head>
 
 <body>
@@ -14,31 +14,31 @@
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
 
-    function UserData() {
-      const [user, setUser] = React.useState({ name: "Tom", age: 36 });
+    function User() {
+      const [name, setName] = React.useState("Tom");
 
-      function handleNameChange(event) {
-        setUser({ name: event.target.value, age: user.age });
-      }
+      React.useEffect(() => {
+        // Изменяем заголовок html-страницы   
+        document.title = `Привет ${name}`;
+      });
 
-      function handleAgeChange(event) {
-        setUser({ name: user.name, age: event.target.value });
+
+      function changeName(event) {
+        setName(event.target.value);
       }
       return (
         <div>
-          <h3>Имя: {user.name}</h3>
-          <h3>Возраст: {user.age}</h3>
+          <h3>Имя: {name}</h3>
 
           <div>
-            <p>Имя: <input type="text" value={user.name} onChange={handleNameChange} /></p>
-            <p>Возраст: <input type="number" min="0" max="110" value={user.age} onChange={handleAgeChange} /></p>
+            <p>Имя: <input type="text" value={name} onChange={changeName} /></p>
           </div>
         </div>
       );
     }
 
     ReactDOM.render(
-      <UserData />,
+      <User />,
       document.getElementById("app")
     )
   </script>
