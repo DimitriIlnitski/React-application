@@ -3,42 +3,46 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Use_Effect_2</title>
+  <title>Use_Effect_3</title>
 </head>
 
 <body>
   <div id="app"></div>
+  <button id="unmountBtn">Unmount</button>
 
   <script crossorigin src="https://unpkg.com/react@17/umd/react.production.min.js"></script>
   <script crossorigin src="https://unpkg.com/react-dom@17/umd/react-dom.production.min.js"></script>
   <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
   <script type="text/babel">
 
+    const appRoot = document.getElementById("app");
+
     function User() {
       const [name, setName] = React.useState("Tom");
-      const [age, setAge] = React.useState(36);
 
+      const unmount = () => {
+        ReactDOM.unmountComponentAtNode(appRoot);
+      }
       React.useEffect(() => {
-        // Изменяем заголовок html-страницы   
-        document.title = `Привет ${name}`;
-        console.log("useEffect");
+
+        const unmountBtn = document.getElementById("unmountBtn");
+
+        // подписываемся на событие onclick кнопки unmountBtn
+        unmountBtn.addEventListener("click", unmount);
+        console.log("EventListener added");
+
+        return () => {
+          // отписываемся от события
+          unmountBtn.removeEventListener("click", unmount);
+          console.log("EventListener removed");
+        }
       },
-        [name]); // эффект срабатывает только при изменении name
+        []); // эффект срабатывает только один раз - при самом первом рендеринге
 
-      const changeName = (event) => setName(event.target.value);
-      const changeAge = (event) => setAge(event.target.value);
-
-      return (
-        <div>
-          <h3>Имя: {name}</h3>
-          <h3>Возраст: {age}</h3>
-
-          <div>
-            <p>Имя: <input type="text" value={name} onChange={changeName} /></p>
-            <p>Возраст: <input type="number" value={age} onChange={changeAge} /></p>
-          </div>
-        </div>
-      );
+      return (<div>
+        <h3>Имя: {name}</h3>
+        <p>Имя: <input type="text" value={name} onChange={(e) => setName(e.target.value)} /></p>
+      </div>);
     }
 
     ReactDOM.render(
