@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Use_Ref</title>
+  <title>Use_ref_2</title>
 </head>
 
 <body>
@@ -15,16 +15,37 @@
   <script type="text/babel">
 
     function UserForm() {
-      const nameField = React.useRef(null);
-      const send = () => {
-        // свойство current указывает на элемент input
-        const inputElement = nameField.current;
-        console.log("Имя: " + inputElement.value);
-      };
+      const [name, setName] = React.useState("Tom");
+
+      React.useEffect(() => {
+        // извлекаем данные из localStorage
+        const userName = localStorage.getItem("userName");
+        // если в localStorage есть такой объект
+        if (userName !== null) {
+          setName(userName);
+          console.log("Got!");
+        }
+
+        // сохраняем данные в localStorage
+        return () => {
+          console.log(name);
+          localStorage.setItem("userName", name);
+          console.log("Saved!");
+        }
+      },
+        []); // эффект срабатывает только один раз - при самом первом рендеринге
+
+      const changeName = (event) => setName(event.target.value);
+      const unmount = () => ReactDOM.unmountComponentAtNode(document.getElementById("app"));
+
       return (
         <div>
-          <input type="text" ref={nameField} />
-          <button onClick={send}>Отправить</button>
+          <h3>Имя: {name}</h3>
+
+          <div>
+            <p>Имя: <input type="text" value={name} onChange={changeName} /></p>
+            <button onClick={unmount}>Unmount</button>
+          </div>
         </div>
       );
     }
