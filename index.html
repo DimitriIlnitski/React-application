@@ -3,7 +3,7 @@
 
 <head>
   <meta charset="utf-8" />
-  <title>Use_ref_2</title>
+  <title>Use_ref_3</title>
 </head>
 
 <body>
@@ -16,6 +16,12 @@
 
     function UserForm() {
       const [name, setName] = React.useState("Tom");
+      const nameRef = React.useRef(name);
+
+      React.useEffect(() => {
+
+        nameRef.current = name;
+      }, [name]);
 
       React.useEffect(() => {
         // извлекаем данные из localStorage
@@ -28,8 +34,8 @@
 
         // сохраняем данные в localStorage
         return () => {
-          console.log(name);
-          localStorage.setItem("userName", name);
+          console.log(nameRef.current);
+          localStorage.setItem("userName", nameRef.current);
           console.log("Saved!");
         }
       },
